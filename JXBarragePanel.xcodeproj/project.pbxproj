@@ -13,6 +13,9 @@
 		7863E4652159CD9A0007A9DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7863E4642159CD9A0007A9DB /* Assets.xcassets */; };
 		7863E4682159CD9A0007A9DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7863E4662159CD9A0007A9DB /* LaunchScreen.storyboard */; };
 		7863E4732159CD9A0007A9DB /* JXBarragePanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7863E4722159CD9A0007A9DB /* JXBarragePanelTests.swift */; };
+		78947041215A0A07009E49FC /* JXBarragePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78947040215A0A07009E49FC /* JXBarragePanel.swift */; };
+		78947050215A159B009E49FC /* TextOnlyBarrageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7894704F215A159B009E49FC /* TextOnlyBarrageController.swift */; };
+		789470AD215B1DAB009E49FC /* CustomBarrageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789470AC215B1DAB009E49FC /* CustomBarrageController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +39,9 @@
 		7863E46E2159CD9A0007A9DB /* JXBarragePanelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JXBarragePanelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7863E4722159CD9A0007A9DB /* JXBarragePanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXBarragePanelTests.swift; sourceTree = "<group>"; };
 		7863E4742159CD9A0007A9DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		78947040215A0A07009E49FC /* JXBarragePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXBarragePanel.swift; sourceTree = "<group>"; };
+		7894704F215A159B009E49FC /* TextOnlyBarrageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOnlyBarrageController.swift; sourceTree = "<group>"; };
+		789470AC215B1DAB009E49FC /* CustomBarrageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBarrageController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,8 +83,11 @@
 		7863E45C2159CD990007A9DB /* JXBarragePanel */ = {
 			isa = PBXGroup;
 			children = (
+				7894703F215A09F0009E49FC /* JXBarragePanel */,
 				7863E45D2159CD990007A9DB /* AppDelegate.swift */,
 				7863E45F2159CD990007A9DB /* ViewController.swift */,
+				7894704F215A159B009E49FC /* TextOnlyBarrageController.swift */,
+				789470AC215B1DAB009E49FC /* CustomBarrageController.swift */,
 				7863E4612159CD990007A9DB /* Main.storyboard */,
 				7863E4642159CD9A0007A9DB /* Assets.xcassets */,
 				7863E4662159CD9A0007A9DB /* LaunchScreen.storyboard */,
@@ -94,6 +103,14 @@
 				7863E4742159CD9A0007A9DB /* Info.plist */,
 			);
 			path = JXBarragePanelTests;
+			sourceTree = "<group>";
+		};
+		7894703F215A09F0009E49FC /* JXBarragePanel */ = {
+			isa = PBXGroup;
+			children = (
+				78947040215A0A07009E49FC /* JXBarragePanel.swift */,
+			);
+			path = JXBarragePanel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -198,6 +215,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7863E4602159CD990007A9DB /* ViewController.swift in Sources */,
+				789470AD215B1DAB009E49FC /* CustomBarrageController.swift in Sources */,
+				78947050215A159B009E49FC /* TextOnlyBarrageController.swift in Sources */,
+				78947041215A0A07009E49FC /* JXBarragePanel.swift in Sources */,
 				7863E45E2159CD990007A9DB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,6 +382,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = JXBarragePanel/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -379,6 +400,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = JXBarragePanel/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
