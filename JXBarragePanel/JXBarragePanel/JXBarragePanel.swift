@@ -26,7 +26,7 @@ public protocol JXBarrageNodeProtocol {
     func getBarrageNodeWidth() -> CGFloat
 }
 
-private class JXBarrageItem {
+private struct JXBarrageItem {
     var barrageNodeRawData: JXBarrageNodeProtocol?
     var barrageId: Int?
     var barrageLine: Int?
@@ -67,7 +67,7 @@ public class JXBarragePanel: UIView {
     
     //MARK: life cycle
     
-    /// create a barrage panel
+    /// create a barrage panel, use panel size height and barrage height & barrage line space to calculate barrage line count
     ///
     /// - Parameters:
     ///   - panelSize: panel size
@@ -101,7 +101,7 @@ public class JXBarragePanel: UIView {
         }
     }
     
-    func setupTimer() {
+    private func setupTimer() {
         timer = Timer.scheduledTimer(timeInterval: tryDisplayWaitBarragesInterval,
                                      target: self,
                                      selector: #selector(canSendWaitBarrage),
@@ -132,7 +132,7 @@ public class JXBarragePanel: UIView {
     
     
     //MARK: impl method
-    func addBarrageImplWithBarrage(_ aBarrage: JXBarrageNodeProtocol) -> Bool {
+    private func addBarrageImplWithBarrage(_ aBarrage: JXBarrageNodeProtocol) -> Bool {
         let line = getEmptyLine()
         if line == -1 {
             return false
@@ -148,23 +148,21 @@ public class JXBarragePanel: UIView {
         
         let barrageId = barrageIdBase
         barrageIdBase += 1
-        let moveTime = (TimeInterval)((panelSize.width + barrageNode.frame.size.width) / barrageMoveSpeed)
+        let barrageItem = JXBarrageItem.init(barrageId: barrageId, barrageLine: line, barrageNode: barrageNode)
+        liveBarrages.append(barrageItem)
         
+        let moveTime = (TimeInterval)((panelSize.width + barrageNode.frame.size.width) / barrageMoveSpeed)
         UIView.animate(withDuration: moveTime, delay: 0.5, options: .curveLinear, animations: {
-            barrageNode.frame.origin.x = -barrageNode.frame.size.width
+            barrageNode.frame.origin.x = -barrageNodeWidth
         }, completion: {finished in
             self.removeBarrageWithBarrageId(barrageId)
         })
         
-        let barrageItem = JXBarrageItem.init(barrageId: barrageId, barrageLine: line, barrageNode: barrageNode)
-        liveBarrages.append(barrageItem)
-        
         return true
-        
     }
     
     /// get one empty line that did not have barrageNode
-    func getEmptyLine() -> Int {
+    private func getEmptyLine() -> Int {
         let start = (Int)(arc4random()) % (lineCount - 1)
         for i in 1..<lineCount {
             let line = (start + i) % lineCount
@@ -177,7 +175,7 @@ public class JXBarragePanel: UIView {
     }
     
     /// judge this line whether have barrageNode
-    func isLineEmpty(_ line: Int) -> Bool {
+    private func isLineEmpty(_ line: Int) -> Bool {
         for item in liveBarrages {
             if let barrageLine = item.barrageLine, barrageLine == line {
                 return false
@@ -187,7 +185,7 @@ public class JXBarragePanel: UIView {
     }
     
     /// get one available line that have space to display another barrageNode
-    func getAvailableLine() -> Int {
+    private func getAvailableLine() -> Int {
         let start = (Int)(arc4random()) % (lineCount - 1)
         for i in 1..<lineCount {
             let line = (start + i) % lineCount
@@ -200,7 +198,7 @@ public class JXBarragePanel: UIView {
     }
     
     /// judge this line whether have space to display another barrageNode
-    func isLineAvailable(_ line: Int) -> Bool {
+    private func isLineAvailable(_ line: Int) -> Bool {
         for item in liveBarrages {
             if let barrageLine = item.barrageLine, barrageLine == line {
                 if let barrageNode = item.barrageNode,
@@ -214,7 +212,7 @@ public class JXBarragePanel: UIView {
     }
     
     /// remove one barrageNode when its not display in screen
-    func removeBarrageWithBarrageId(_ aId: Int) {
+    private func removeBarrageWithBarrageId(_ aId: Int) {
         var needDeleteBarrageItemIndex = -1
         for (index, item) in liveBarrages.enumerated() {
             if let barrageId = item.barrageId, barrageId == aId,
@@ -225,14 +223,14 @@ public class JXBarragePanel: UIView {
             }
         }
         
-        if needDeleteBarrageItemIndex > 0 {
+        if needDeleteBarrageItemIndex >= 0 {
             liveBarrages.remove(at: needDeleteBarrageItemIndex)
         }
     }
     
     //MARK: timer method
     
-    @objc func canSendWaitBarrage() {
+    @objc private func canSendWaitBarrage() {
         guard waitBarrages.count > 0 else {
             return
         }
