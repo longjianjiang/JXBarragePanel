@@ -28,14 +28,13 @@ struct TextBarrageNode: JXBarrageNodeProtocol {
 then just call add method:
 
 ```swift
-let barragePanel = barragePanel = JXBarragePanel.init(panelSize: CGSize(width: 414, height: 200), 
-barrageHeight: 30, barrageLineSpace: 10)
+let barragePanel = JXBarragePanel.init(panelSize: CGSize(width: 414, height: 200), barrageHeight: 30, barrageLineSpace: 10)
 let node = TextBarrageNode.init(barrageNode: text)
 barragePanel.add(barrage: node)
 ```
 
 # Todo
-- [] provide custom animation methods
+- [ ] provide custom animation methods
 
 # Contact
 brucejiang5.7@gmail.com
