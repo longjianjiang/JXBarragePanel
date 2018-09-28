@@ -8,7 +8,25 @@
 
 import UIKit
 
-struct TextBarrageNode: JXBarrageNodeProtocol {
+struct TextBarrageNode: JXBarrageNodeProtocol, JXBarrageNodeAnimationProtocol {
+    func getBarrageMoveAnimation() -> CAAnimation {
+        let animationGroup = CAAnimationGroup()
+        animationGroup.timingFunction = CAMediaTimingFunction.init(name: .linear)
+        animationGroup.duration = 10
+        animationGroup.fillMode = .both
+        
+        let move = CABasicAnimation.init(keyPath: "position.x")
+        move.fromValue = UIScreen.main.bounds.size.width
+        move.toValue = -getBarrageNodeWidth()
+        let scale = CABasicAnimation.init(keyPath: "transform.scale")
+        scale.fromValue = 5
+        scale.toValue = 1
+        
+        animationGroup.animations = [move, scale]
+        
+        return animationGroup
+    }
+    
     func getBarrageNodeWidth() -> CGFloat {
         return str.widthWithFont(font: UIFont.systemFont(ofSize: 15))
     }
@@ -34,7 +52,9 @@ class TextOnlyBarrageController: UIViewController {
     var textField: UITextField!
     
     func setupBarragePanel() {
-        barragePanel = JXBarragePanel.init(panelSize: CGSize(width: 414, height: 200), barrageHeight: 30, barrageLineSpace: 10)
+        barragePanel = JXBarragePanel.init(panelSize: CGSize(width: UIScreen.main.bounds.size.width, height: 200),
+                                           barrageHeight: 30,
+                                           barrageLineSpace: 10)
         barragePanel.frame = CGRect(x: 0,
                                     y: 100,
                                     width: view.frame.size.width,

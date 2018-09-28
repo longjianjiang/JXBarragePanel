@@ -1,5 +1,5 @@
 # JXBarragePanel
-One barrage panel that allow you define barrage display style.
+One barrage panel that allow you define barrage display style & barrage move animation.
 
 # Usage
 you should create a barrage node conform `JXBarrageNodeProtocol`, below is an example:
@@ -33,8 +33,27 @@ let node = TextBarrageNode.init(barrageNode: text)
 barragePanel.add(barrage: node)
 ```
 
-# Todo
-- [ ] provide custom animation methods
+you also can define your custom animation, let your barrage node confrom `JXBarrageNodeAnimationProtocol`, below is an example:
+
+```swift
+    func getBarrageMoveAnimation() -> CAAnimation {
+        let animationGroup = CAAnimationGroup()
+        animationGroup.timingFunction = CAMediaTimingFunction.init(name: .linear)
+        animationGroup.duration = 10
+        animationGroup.fillMode = .both
+        
+        let move = CABasicAnimation.init(keyPath: "position.x")
+        move.fromValue = UIScreen.main.bounds.size.width
+        move.toValue = -getBarrageNodeWidth()
+        let scale = CABasicAnimation.init(keyPath: "transform.scale")
+        scale.fromValue = 5
+        scale.toValue = 1
+        
+        animationGroup.animations = [move, scale]
+        
+        return animationGroup
+    }
+```
 
 # Contact
 brucejiang5.7@gmail.com

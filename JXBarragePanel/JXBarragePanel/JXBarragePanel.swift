@@ -12,6 +12,8 @@ private struct JXBarragePanelConstants {
     static let kBarrageMoveSpeed: CGFloat = 50.0
     static let kBarrageHorizontalSpace: CGFloat = 20.0
     static let kTryDisplayWaitBarragesInterval: TimeInterval = 1.0
+    
+    static let kLayerAnimationBarrageIdKey = "kLayerAnimationBarrageIdKey"
 }
 
 public protocol JXBarrageNodeProtocol {
@@ -24,6 +26,13 @@ public protocol JXBarrageNodeProtocol {
     ///
     /// - Returns: barrageNode's width
     func getBarrageNodeWidth() -> CGFloat
+}
+
+public protocol JXBarrageNodeAnimationProtocol {
+    /// this method tell panel barrageNode's move animation
+    ///
+    /// - Returns: animation that barrageNode will perform
+    func getBarrageMoveAnimation() -> CAAnimation
 }
 
 private struct JXBarrageItem {
@@ -140,6 +149,7 @@ public class JXBarragePanel: UIView {
         
         let barrageNode = aBarrage.getBarrageNode()
         let barrageNodeWidth = aBarrage.getBarrageNodeWidth()
+        let moveTime = (TimeInterval)((panelSize.width + barrageNode.frame.size.width) / barrageMoveSpeed)
         barrageNode.frame = CGRect(x: panelSize.width,
                                    y: (CGFloat)(line) * (barrageHeight + barrageLineSpace) + barrageLineSpace,
                                    width: barrageNodeWidth,
@@ -151,12 +161,24 @@ public class JXBarragePanel: UIView {
         let barrageItem = JXBarrageItem.init(barrageId: barrageId, barrageLine: line, barrageNode: barrageNode)
         liveBarrages.append(barrageItem)
         
-        let moveTime = (TimeInterval)((panelSize.width + barrageNode.frame.size.width) / barrageMoveSpeed)
-        UIView.animate(withDuration: moveTime, delay: 0.5, options: .curveLinear, animations: {
-            barrageNode.frame.origin.x = -barrageNodeWidth
-        }, completion: {finished in
-            self.removeBarrageWithBarrageId(barrageId)
-        })
+        if let barrageAnimationNode = aBarrage as? JXBarrageNodeAnimationProtocol {
+            let customBarrageAnimation = barrageAnimationNode.getBarrageMoveAnimation()
+            
+            customBarrageAnimation.delegate = self
+            customBarrageAnimation.setValue(barrageId, forKey: JXBarragePanelConstants.kLayerAnimationBarrageIdKey)
+            barrageNode.layer.add(customBarrageAnimation, forKey: nil)
+        } else {
+            let moveLeftAnimation = CABasicAnimation.init(keyPath: "position.x")
+            moveLeftAnimation.fromValue = panelSize.width
+            moveLeftAnimation.toValue = -barrageNodeWidth
+            moveLeftAnimation.duration = moveTime
+            moveLeftAnimation.fillMode = .both
+            moveLeftAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+            
+            moveLeftAnimation.delegate = self
+            moveLeftAnimation.setValue(barrageId, forKey: JXBarragePanelConstants.kLayerAnimationBarrageIdKey)
+            barrageNode.layer.add(moveLeftAnimation, forKey: nil)
+        }
         
         return true
     }
@@ -225,6 +247,9 @@ public class JXBarragePanel: UIView {
         
         if needDeleteBarrageItemIndex >= 0 {
             liveBarrages.remove(at: needDeleteBarrageItemIndex)
+            #if DEBUG
+            print("one barrage be remove")
+            #endif
         }
     }
     
@@ -238,6 +263,14 @@ public class JXBarragePanel: UIView {
         let waitItem = waitBarrages.first!
         if let aBarrage = waitItem.barrageNodeRawData, addBarrageImplWithBarrage(aBarrage) {
             waitBarrages.removeFirst()
+        }
+    }
+}
+
+extension JXBarragePanel: CAAnimationDelegate {
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if let barrageId = anim.value(forKey: JXBarragePanelConstants.kLayerAnimationBarrageIdKey) {
+            removeBarrageWithBarrageId(barrageId as! Int)
         }
     }
 }
