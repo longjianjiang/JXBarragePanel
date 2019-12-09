@@ -185,8 +185,8 @@ public class JXBarragePanel: UIView {
     
     /// get one empty line that did not have barrageNode
     private func getEmptyLine() -> Int {
-        let start = (Int)(arc4random()) % (lineCount - 1)
-        for i in 1..<lineCount {
+        let start = (Int)(arc4random()) % (lineCount)
+        for i in 0..<lineCount {
             let line = (start + i) % lineCount
             if isLineEmpty(line) {
                 return line
@@ -208,8 +208,8 @@ public class JXBarragePanel: UIView {
     
     /// get one available line that have space to display another barrageNode
     private func getAvailableLine() -> Int {
-        let start = (Int)(arc4random()) % (lineCount - 1)
-        for i in 1..<lineCount {
+        let start = (Int)(arc4random()) % (lineCount)
+        for i in 0..<lineCount {
             let line = (start + i) % lineCount
             if isLineAvailable(line) {
                 return line
