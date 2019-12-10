@@ -168,9 +168,10 @@ public class JXBarragePanel: UIView {
             customBarrageAnimation.setValue(barrageId, forKey: JXBarragePanelConstants.kLayerAnimationBarrageIdKey)
             barrageNode.layer.add(customBarrageAnimation, forKey: nil)
         } else {
+            /// [ref](https://stackoverflow.com/questions/11931405/whats-the-difference-between-layer-position-y-and-layer-frame-origin-y)
             let moveLeftAnimation = CABasicAnimation.init(keyPath: "position.x")
-            moveLeftAnimation.fromValue = panelSize.width
-            moveLeftAnimation.toValue = -barrageNodeWidth
+            moveLeftAnimation.fromValue = panelSize.width + barrageNodeWidth / 2
+            moveLeftAnimation.toValue = -(barrageNodeWidth / 2)
             moveLeftAnimation.duration = moveTime
             moveLeftAnimation.fillMode = .both
             moveLeftAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
@@ -221,15 +222,21 @@ public class JXBarragePanel: UIView {
     
     /// judge this line whether have space to display another barrageNode
     private func isLineAvailable(_ line: Int) -> Bool {
+        var lineItems = [JXBarrageItem]()
         for item in liveBarrages {
             if let barrageLine = item.barrageLine, barrageLine == line {
-                if let barrageNode = item.barrageNode,
-                    let barragePresentionLayer = barrageNode.layer.presentation(),
-                    barragePresentionLayer.frame.origin.x > panelSize.width - barrageNode.frame.size.width - barrageHorizontalSpace {
-                    return false
-                }
+                lineItems.append(item)
             }
         }
+        
+        for item in lineItems {
+            if let node = item.barrageNode,
+                let barragePresentionLayer = node.layer.presentation(),
+                barragePresentionLayer.position.x > panelSize.width - (node.frame.width + barrageHorizontalSpace) / 2 {
+                return false
+            }
+        }
+        
         return true
     }
     
