@@ -149,7 +149,7 @@ public class JXBarragePanel: UIView {
         
         let barrageNode = aBarrage.getBarrageNode()
         let barrageNodeWidth = aBarrage.getBarrageNodeWidth()
-        let moveTime = (TimeInterval)((panelSize.width + barrageNode.frame.size.width) / barrageMoveSpeed)
+        let moveTime = (TimeInterval)((panelSize.width + barrageNodeWidth) / barrageMoveSpeed)
         barrageNode.frame = CGRect(x: panelSize.width,
                                    y: (CGFloat)(line) * (barrageHeight + barrageLineSpace) + barrageLineSpace,
                                    width: barrageNodeWidth,
